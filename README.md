@@ -1,5 +1,9 @@
 # Network Packet Analyzer
 
+[![CI](https://github.com/AdityaMPagare/-network-packet-analyzer/actions/workflows/ci.yml/badge.svg)](https://github.com/AdityaMPagare/-network-packet-analyzer/actions/workflows/ci.yml)
+![Python](https://img.shields.io/badge/python-3.10%2B-blue)
+![License](https://img.shields.io/badge/license-MIT-green)
+
 A Python-based network packet analyzer for packet capture, protocol parsing,
 filtering, statistics, and export. A clean, beginner-friendly defensive
 network-analysis project built as a personal cybersecurity portfolio piece.
@@ -72,7 +76,7 @@ filtering), `parser.py` converts each packet into a lightweight
 ## Installation
 
 ```bash
-git clone <repository-url>
+git clone https://github.com/AdityaMPagare/-network-packet-analyzer.git network-packet-analyzer
 cd network-packet-analyzer
 python -m venv .venv
 source .venv/bin/activate
@@ -148,19 +152,24 @@ python main.py --offline capture.pcap
 ## CLI Options
 
 ```text
-usage: main.py [-h] [-i INTERFACE] [-c COUNT] [-p PROTOCOL] [--host HOST]
-               [--port PORT] [-o FILE] [--pcap FILE] [--offline FILE] [--debug]
+usage: main.py [-h] [--version] [-i INTERFACE] [-c COUNT] [-p PROTOCOL]
+               [--host HOST] [--port PORT] [-o FILE] [--pcap FILE]
+               [--offline FILE] [--debug]
 
 Network Packet Analyzer - capture, parse, and export network packets
 (defensive network analysis).
 
 options:
   -h, --help            show this help message and exit
+  --version             show the program version and exit
   -i, --interface INTERFACE
-                        network interface to capture from (default: Scapy picks a suitable one)
-  -c, --count COUNT     number of packets to capture (default: capture until Ctrl+C)
+                        network interface to capture from (default: Scapy
+                        picks a suitable one)
+  -c, --count COUNT     number of packets to capture (default: capture until
+                        Ctrl+C)
   -p, --protocol PROTOCOL
-                        only capture this protocol (ARP, DNS, ICMP, ICMPV6, IPV4, IPV6, TCP, UDP)
+                        only capture this protocol (ARP, DNS, ICMP, ICMPV6,
+                        IPV4, IPV6, TCP, UDP)
   --host HOST           only capture packets to/from this IP address or hostname
   --port PORT           only capture packets to/from this port
   -o, --output FILE     export parsed packets to FILE (.json or .csv; format chosen by file extension)
@@ -222,6 +231,9 @@ With verbose output:
 pytest -v
 ```
 
+Tests also run automatically via GitHub Actions on every push and pull
+request (see `.github/workflows/ci.yml`).
+
 ## Project Structure
 
 ```
@@ -231,6 +243,9 @@ network-packet-analyzer/
 ├── README.md
 ├── LICENSE                  # MIT
 ├── .gitignore               # Excludes captures, caches, virtualenvs
+├── .github/
+│   └── workflows/
+│       └── ci.yml           # GitHub Actions test workflow
 ├── packet_analyzer/
 │   ├── __init__.py
 │   ├── capture.py           # Scapy sniffing, interface validation, Ctrl+C guard
@@ -243,7 +258,8 @@ network-packet-analyzer/
     ├── test_parser.py       # IPv4/TCP/UDP/ICMP/ARP/IPv6/DNS parsing
     ├── test_statistics.py   # Statistics aggregation and summary
     ├── test_filters.py      # Validation, BPF building, matching
-    └── test_exporter.py     # JSON/CSV/PCAP export
+    ├── test_exporter.py     # JSON/CSV/PCAP export
+    └── test_main.py         # CLI behavior (mocked capture)
 ```
 
 ## Limitations

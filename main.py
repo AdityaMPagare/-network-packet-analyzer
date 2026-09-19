@@ -13,8 +13,10 @@ from __future__ import annotations
 
 import argparse
 import sys
+from pathlib import Path
 
 try:
+    from packet_analyzer import __version__
     from packet_analyzer.capture import capture_packets, validate_interface
     from packet_analyzer.exporter import export_pcap, export_to_file
     from packet_analyzer.filters import VALID_PROTOCOLS
@@ -43,6 +45,12 @@ def build_parser() -> argparse.ArgumentParser:
         prog="main.py",
         description="Network Packet Analyzer - capture, parse, and export "
         "network packets (defensive network analysis).",
+    )
+    parser.add_argument(
+        "--version",
+        action="version",
+        version=f"%(prog)s {__version__}",
+        help="show the program version and exit",
     )
     parser.add_argument(
         "-i",
@@ -119,6 +127,9 @@ def main(argv: list[str] | None = None) -> int:
     try:
         if args.count is not None and args.count <= 0:
             raise ValueError("Invalid packet count. Use a positive integer.")
+
+        if args.offline and not Path(args.offline).exists():
+            raise ValueError(f"PCAP file not found: {args.offline}")
 
         if args.interface and not args.offline:
             validate_interface(args.interface)
